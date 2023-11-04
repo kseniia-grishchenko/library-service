@@ -1,0 +1,22 @@
+export default [
+  { id: 1, title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', image: 'gatsby.jpeg' },
+  { id: 2, title: 'To Kill a Mockingbird', author: 'Harper Lee' },
+  { id: 3, title: '1984', author: 'George Orwell' },
+  { id: 4, title: 'Pride and Prejudice', author: 'Jane Austen' },
+  { id: 5, title: 'The Catcher in the Rye', author: 'J.D. Salinger' },
+  { id: 6, title: 'The Hobbit', author: 'J.R.R. Tolkien' },
+  { id: 7, title: 'Moby Dick', author: 'Herman Melville' },
+  { id: 8, title: 'War and Peace', author: 'Leo Tolstoy' },
+  { id: 9, title: 'Hamlet', author: 'William Shakespeare' },
+  { id: 10, title: 'The Alchemist', author: 'Paulo Coelho' },
+  { id: 11, title: 'The Lord of the Rings', author: 'J.R.R. Tolkien' },
+  { id: 12, title: 'Beloved', author: 'Toni Morrison' },
+  { id: 13, title: 'The Divine Comedy', author: 'Dante Alighieri' },
+  { id: 14, title: 'Invisible Man', author: 'Ralph Ellison' },
+  { id: 15, title: 'Don Quixote', author: 'Miguel de Cervantes' },
+  { id: 16, title: 'Jane Eyre', author: 'Charlotte Brontë' },
+  { id: 17, title: 'The Brothers Karamazov', author: 'Fyodor Dostoevsky' },
+  { id: 18, title: 'Crime and Punishment', author: 'Fyodor Dostoevsky' },
+  { id: 19, title: 'One Hundred Years of Solitude', author: 'Gabriel García Márquez' },
+  { id: 20, title: 'The Picture of Dorian Gray', author: 'Oscar Wilde' }
+];
