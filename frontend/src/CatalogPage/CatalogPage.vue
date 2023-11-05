@@ -1,39 +1,118 @@
 <template>
-  <p class="greeting">{{ greeting }}</p>
-  <el-page-header @back="goBack">
-    <template #content>
-      <span class="text-large font-600 mr-3"> Title </span>
-    </template>
-  </el-page-header>
-  <el-main>
-    <div class="items-container">
-      <div v-for="book in allBooks" :key="book.id">
-        <el-card :body-style="{ padding: '10px' }">
-          <el-image :src="book.image" fit="contain">
-            <template #error>
-              <div class="image-slot">
-                <el-icon><icon-picture /></el-icon>
+  <el-container>
+    <el-header>
+      <el-page-header @back="goBack">
+        <template #content>
+          <span class="text-large font-600 mr-3"> Title </span>
+        </template>
+      </el-page-header>
+    </el-header>
+    <el-container>
+      <el-aside>
+        <filter-select
+          section-name="Genres"
+          :filter-options="genres"
+          :checked-options="initialState.checkedGenres"
+          @filter-changed="handleGenreFilterChange"
+          @filter-reset="resetGenres"
+        ></filter-select>
+        <filter-select
+          section-name="Authors"
+          :filter-options="authors"
+          :checked-options="initialState.checkedAuthors"
+          @filter-changed="handleAuthorFilterChange"
+          @filter-reset="resetAuthors"
+        ></filter-select>
+      </el-aside>
+      <el-main>
+        <div class="items-container">
+          <div v-for="book in filteredItems" :key="book.id">
+            <el-card :body-style="{ padding: '10px' }">
+              <el-image :src="book.image" fit="contain">
+                <template #error>
+                  <div class="image-slot">
+                    <el-icon><icon-picture /></el-icon>
+                  </div>
+                </template>
+              </el-image>
+              <div style="padding: 14px">
+                <span class="title">{{ book.title }}</span>
+                <div class="bottom">
+                  <span class="author">{{ book.author }}</span>
+                </div>
               </div>
-            </template>
-          </el-image>
-          <div style="padding: 14px">
-            <span class="title">{{ book.title }}</span>
-            <div class="bottom">
-              <span class="author">{{ book.author }}</span>
-            </div>
+            </el-card>
           </div>
-        </el-card>
-      </div>
-    </div>
-  </el-main>
+        </div>
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <script setup>
 import { Picture as IconPicture } from '@element-plus/icons-vue';
-import { ref } from 'vue';
+import { ref, computed, reactive } from 'vue';
+import FilterSelect from './FilterSelect.vue';
 import books from '../assets/books.js';
+import genres from '../assets/genres.js';
+import authors from '../assets/authors.js';
 
-const allBooks = ref(books);
+const initialState = reactive({
+  books,
+  checkedGenres: [],
+  checkedAuthors: []
+});
+
+const filteredItems = computed(() => {
+  const { books, checkedAuthors, checkedGenres } = initialState;
+  if (!checkedGenres.length && !checkedAuthors.length) return books;
+
+  let filteredBooks = books;
+
+  if (checkedGenres.length) {
+    filteredBooks = filteredBooks.filter((book) => {
+      const bookGenres = book.genres.map((genre) => genre.name);
+      return !!bookGenres.some((genre) => checkedGenres.includes(genre));
+    });
+  }
+  if (checkedAuthors.length) {
+    filteredBooks = filteredBooks.filter((book) => {
+      const bookAuthors = book.authors.map((author) => author.full_name);
+      return !!bookAuthors.some((author) => checkedAuthors.includes(author));
+    });
+  }
+
+  return filteredBooks;
+});
+
+// replace genre name with id later
+const handleGenreFilterChange = (genreName) => {
+  const { checkedGenres } = initialState;
+
+  if (checkedGenres.includes(genreName)) {
+    initialState.checkedGenres = checkedGenres.filter((name) => name !== genreName);
+  } else {
+    checkedGenres.push(genreName);
+  }
+};
+
+const handleAuthorFilterChange = (authorName) => {
+  const { checkedAuthors } = initialState;
+
+  if (checkedAuthors.includes(authorName)) {
+    initialState.checkedAuthors = checkedAuthors.filter((name) => name !== authorName);
+  } else {
+    checkedAuthors.push(authorName);
+  }
+};
+
+const resetGenres = () => {
+  initialState.checkedGenres = [];
+};
+
+const resetAuthors = () => {
+  initialState.checkedAuthors = [];
+};
 </script>
 
 <style scoped>
