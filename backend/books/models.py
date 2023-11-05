@@ -9,11 +9,10 @@ class Genre(models.Model):
 
 
 class Author(models.Model):
-    first_name = models.CharField(max_length=63)
-    last_name = models.CharField(max_length=63)
+    full_name = models.CharField(max_length=255)
 
     def __str__(self) -> str:
-        return f"{self.first_name} {self.last_name}"
+        return self.full_name
 
 
 class Book(models.Model):
