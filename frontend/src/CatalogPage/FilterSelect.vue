@@ -5,23 +5,27 @@
       <el-button @click="$emit('filter-reset')">Clear all</el-button>
     </div>
     <div>
-      <el-checkbox
-        v-for="filter in modifiedFilterOptions"
-        :label="filter.name || filter.full_name"
-        @change="handleFilterChange(filter.name || filter.full_name)"
-      ></el-checkbox>
+      <el-checkbox-group v-model="checkedOptions">
+        <el-checkbox
+          v-for="filter in modifiedFilterOptions"
+          :label="filter.name || filter.full_name"
+          @change="handleFilterChange(filter.name || filter.full_name)"
+          :checked="checkedOptions.includes(filter.name || filter.full_name)"
+        ></el-checkbox>
+      </el-checkbox-group>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, toRef } from 'vue';
 
 const props = defineProps({
   sectionName: String,
   filterOptions: [],
   checkedOptions: []
 });
+const checkedOptions = toRef(props, 'checkedOptions');
 const emit = defineEmits(['filter-changed', 'filter-reset']);
 
 const modifiedFilterOptions = ref(props.filterOptions);
