@@ -20,6 +20,8 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 api = [
     path("books/", include("books.urls")),
+    path("borrowing/", include("borrowings.urls")),
+    path("payments/", include("payments.urls")),
 ]
 
 urlpatterns = [

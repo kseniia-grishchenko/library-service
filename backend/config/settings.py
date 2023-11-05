@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'books',
+    'borrowings',
+    'payments',
     'drf_spectacular',
 ]
 
