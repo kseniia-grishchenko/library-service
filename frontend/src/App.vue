@@ -1,8 +1,3 @@
-<script setup>
-import CatalogPage from './CatalogPage/CatalogPage.vue';
-import HeaderComp from './HeaderComp/HeaderComp.vue';
-</script>
-
 <template>
   <div class="common-layout">
     <el-container>
@@ -11,9 +6,16 @@ import HeaderComp from './HeaderComp/HeaderComp.vue';
       </el-header>
       <el-main>
         <catalog-page></catalog-page>
+        <book-page></book-page>
       </el-main>
     </el-container>
   </div>
 </template>
+
+<script setup>
+import BookPage from './BookPage/BookPage.vue';
+import CatalogPage from './CatalogPage/CatalogPage.vue';
+import HeaderComp from './HeaderComp/HeaderComp.vue';
+</script>
 
 <style scoped></style>

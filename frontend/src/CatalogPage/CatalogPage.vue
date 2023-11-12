@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container v-if="active">
     <el-header>
       <el-page-header @back="goBack">
         <template #content>
@@ -26,7 +26,7 @@
       </el-aside>
       <el-main>
         <div class="items-container">
-          <div v-for="book in filteredItems" :key="book.id">
+          <div v-for="book in filteredItems" :key="book.id" @click="redirectToBookPage(book.id)">
             <el-card :body-style="{ padding: '10px' }">
               <el-image :src="book.image" fit="contain">
                 <template #error>
@@ -38,7 +38,9 @@
               <div style="padding: 14px">
                 <span class="title">{{ book.title }}</span>
                 <div class="bottom">
-                  <span class="author">{{ book.author }}</span>
+                  <span class="author" v-for="(author, index) in book.authors" :key="index">
+                    {{ author.full_name }}
+                  </span>
                 </div>
               </div>
             </el-card>
@@ -57,12 +59,9 @@ import genres from '../assets/genres.js';
 import authors from '../assets/authors.js';
 
 export default {
-  components: {
-    FilterSelect,
-    IconPicture
-  },
   data() {
     return {
+      active: false,
       books,
       genres,
       authors,
@@ -117,7 +116,21 @@ export default {
     },
     resetAuthors() {
       this.checkedAuthors = [];
+    },
+    redirectToBookPage(bookId) {
+      location.hash = `#/book?id=${bookId}`;
+    },
+    hashChangeHandler() {
+      this.active = !!location.hash.match(/#\/$/);
     }
+  },
+  created() {
+    window.addEventListener('hashchange', this.hashChangeHandler);
+    this.hashChangeHandler();
+  },
+  components: {
+    FilterSelect,
+    IconPicture
   }
 };
 </script>
