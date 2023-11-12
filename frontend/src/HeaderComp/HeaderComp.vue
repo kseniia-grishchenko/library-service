@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <span class="text-large font-600 mr-3">Our logo</span>
+    <span><el-link href="#/">Our logo</el-link></span>
     <el-input v-model="input" placeholder="Type something" :prefix-icon="Search" />
     <el-button>
       <el-icon><User /></el-icon>

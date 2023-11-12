@@ -23,12 +23,15 @@
           {{ genre.name }}
         </span>
       </div>
+      <review-list :bookId="book.id"></review-list>
     </el-col>
   </el-row>
 </template>
 
 <script>
+import { Picture as IconPicture } from '@element-plus/icons-vue';
 import books from '../assets/books.js';
+import ReviewList from './ReviewList.vue';
 
 export default {
   data: () => ({
@@ -37,18 +40,30 @@ export default {
   }),
   methods: {
     hashChangeHandler() {
-      const [hashMatch, bookId] = location.hash.match(/book\?id=(\d+)/);
-      this.active = !!hashMatch;
-      if (bookId) this.fetchBook(bookId);
+      const match = location.hash.match(/book\?id=(\d+)/);
+      this.active = !!match;
+      this.book = {};
+      if (!this.active) return;
+      const [, bookId] = match;
+      this.fetchBook(bookId);
     },
     fetchBook(bookId) {
       // replace with API call to /books?id=
       this.book = books.find((book) => book.id === Number(bookId));
     }
   },
+  watch: {
+    book(book) {
+      this.$emit('book-selected', book.title);
+    }
+  },
   created() {
     window.addEventListener('hashchange', this.hashChangeHandler);
     this.hashChangeHandler();
+  },
+  components: {
+    ReviewList,
+    IconPicture
   }
 };
 </script>
@@ -73,7 +88,7 @@ h3 {
 
 .description,
 .genres {
-  margin-top: 12px;
+  margin: 12px 0 24px;
 }
 
 .description {
@@ -112,5 +127,25 @@ h3 {
   font-size: 15px;
   color: #222;
   font-weight: 500;
+}
+
+.image-slot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: var(--el-fill-color-light);
+  color: var(--el-text-color-secondary);
+  font-size: 30px;
+}
+.image-slot .el-icon {
+  font-size: 30px;
+}
+
+.el-image {
+  padding: 0 5px;
+  width: 100%;
+  height: 100%;
 }
 </style>
