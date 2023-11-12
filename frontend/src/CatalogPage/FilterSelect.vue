@@ -2,14 +2,15 @@
   <div class="filter">
     <div class="header">
       <span>{{ sectionName }}</span>
-      <el-button @click="$emit('filter-reset')">Clear all</el-button>
+      <el-button @click="resetFilters">Clear all</el-button>
     </div>
     <div>
-      <el-checkbox-group v-model="checkedOptions">
+      <el-checkbox-group v-model="modifiedOptions">
         <el-checkbox
-          v-for="filter in modifiedFilterOptions"
+          v-for="filter in filterOptions"
+          :key="filter.name || filter.full_name"
           :label="filter.name || filter.full_name"
-          @change="handleFilterChange(filter.name || filter.full_name)"
+          @change="() => handleFilterChange(filter.name || filter.full_name)"
           :checked="checkedOptions.includes(filter.name || filter.full_name)"
         ></el-checkbox>
       </el-checkbox-group>
@@ -17,22 +18,32 @@
   </div>
 </template>
 
-<script setup>
-import { ref, toRef } from 'vue';
-
-const props = defineProps({
-  sectionName: String,
-  filterOptions: [],
-  checkedOptions: []
-});
-const checkedOptions = toRef(props, 'checkedOptions');
-const emit = defineEmits(['filter-changed', 'filter-reset']);
-
-const modifiedFilterOptions = ref(props.filterOptions);
-
-// replace name with id when API is ready
-const handleFilterChange = (name) => {
-  emit('filter-changed', name);
+<script>
+export default {
+  data: () => ({
+    modifiedOptions: []
+  }),
+  props: {
+    sectionName: String,
+    filterOptions: Array,
+    checkedOptions: Array
+  },
+  methods: {
+    handleFilterChange(name) {
+      this.$emit('filter-changed', name);
+    },
+    resetFilters() {
+      this.$emit('filter-reset');
+    }
+  },
+  watch: {
+    checkedOptions: {
+      handler(val) {
+        this.modifiedOptions = val;
+      },
+      immediate: true
+    }
+  }
 };
 </script>
 

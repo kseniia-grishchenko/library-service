@@ -12,14 +12,14 @@
         <filter-select
           section-name="Genres"
           :filter-options="genres"
-          :checked-options="initialState.checkedGenres"
+          :checked-options="checkedGenres"
           @filter-changed="handleGenreFilterChange"
           @filter-reset="resetGenres"
         ></filter-select>
         <filter-select
           section-name="Authors"
           :filter-options="authors"
-          :checked-options="initialState.checkedAuthors"
+          :checked-options="checkedAuthors"
           @filter-changed="handleAuthorFilterChange"
           @filter-reset="resetAuthors"
         ></filter-select>
@@ -49,69 +49,76 @@
   </el-container>
 </template>
 
-<script setup>
+<script>
 import { Picture as IconPicture } from '@element-plus/icons-vue';
-import { ref, computed, reactive } from 'vue';
 import FilterSelect from './FilterSelect.vue';
 import books from '../assets/books.js';
 import genres from '../assets/genres.js';
 import authors from '../assets/authors.js';
 
-const initialState = reactive({
-  books,
-  checkedGenres: [],
-  checkedAuthors: []
-});
+export default {
+  components: {
+    FilterSelect,
+    IconPicture
+  },
+  data() {
+    return {
+      books,
+      genres,
+      authors,
+      checkedGenres: [],
+      checkedAuthors: []
+    };
+  },
+  computed: {
+    filteredItems() {
+      if (!this.checkedGenres.length && !this.checkedAuthors.length) return this.books;
 
-const filteredItems = computed(() => {
-  const { books, checkedAuthors, checkedGenres } = initialState;
-  if (!checkedGenres.length && !checkedAuthors.length) return books;
+      let filteredBooks = this.books;
 
-  let filteredBooks = books;
+      if (this.checkedGenres.length) {
+        filteredBooks = filteredBooks.filter((book) => {
+          const bookGenres = book.genres.map((genre) => genre.name);
+          return bookGenres.some((genre) => this.checkedGenres.includes(genre));
+        });
+      }
+      if (this.checkedAuthors.length) {
+        filteredBooks = filteredBooks.filter((book) => {
+          const bookAuthors = book.authors.map((author) => author.full_name);
+          return bookAuthors.some((author) => this.checkedAuthors.includes(author));
+        });
+      }
 
-  if (checkedGenres.length) {
-    filteredBooks = filteredBooks.filter((book) => {
-      const bookGenres = book.genres.map((genre) => genre.name);
-      return !!bookGenres.some((genre) => checkedGenres.includes(genre));
-    });
+      return filteredBooks;
+    }
+  },
+  methods: {
+    goBack() {
+      // Implement goBack logic
+    },
+    handleGenreFilterChange(genreName) {
+      const index = this.checkedGenres.indexOf(genreName);
+      if (index > -1) {
+        this.checkedGenres.splice(index, 1);
+      } else {
+        this.checkedGenres.push(genreName);
+      }
+    },
+    handleAuthorFilterChange(authorName) {
+      const index = this.checkedAuthors.indexOf(authorName);
+      if (index > -1) {
+        this.checkedAuthors.splice(index, 1);
+      } else {
+        this.checkedAuthors.push(authorName);
+      }
+    },
+    resetGenres() {
+      this.checkedGenres = [];
+    },
+    resetAuthors() {
+      this.checkedAuthors = [];
+    }
   }
-  if (checkedAuthors.length) {
-    filteredBooks = filteredBooks.filter((book) => {
-      const bookAuthors = book.authors.map((author) => author.full_name);
-      return !!bookAuthors.some((author) => checkedAuthors.includes(author));
-    });
-  }
-
-  return filteredBooks;
-});
-
-// replace genre name with id later
-const handleGenreFilterChange = (genreName) => {
-  const { checkedGenres } = initialState;
-
-  if (checkedGenres.includes(genreName)) {
-    initialState.checkedGenres = checkedGenres.filter((name) => name !== genreName);
-  } else {
-    checkedGenres.push(genreName);
-  }
-};
-
-const handleAuthorFilterChange = (authorName) => {
-  const { checkedAuthors } = initialState;
-
-  if (checkedAuthors.includes(authorName)) {
-    initialState.checkedAuthors = checkedAuthors.filter((name) => name !== authorName);
-  } else {
-    checkedAuthors.push(authorName);
-  }
-};
-
-const resetGenres = () => {
-  initialState.checkedGenres = [];
-};
-
-const resetAuthors = () => {
-  initialState.checkedAuthors = [];
 };
 </script>
 
