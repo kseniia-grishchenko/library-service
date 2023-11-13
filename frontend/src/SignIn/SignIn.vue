@@ -8,8 +8,9 @@
         <el-input type="password" v-model="form.password"></el-input>
       </el-form-item>
       <el-form-item class="form-item btn">
-        <el-button type="primary" @click="submitForm">Register</el-button>
+        <el-button type="primary" @click="submitForm">Authorize</el-button>
       </el-form-item>
+      <el-link href="#/sign-up">Don't have an account yet? Sign up</el-link>
     </el-form>
   </el-container>
 </template>

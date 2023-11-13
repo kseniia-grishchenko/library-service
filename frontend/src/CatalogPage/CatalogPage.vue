@@ -21,6 +21,9 @@
         <div class="items-container">
           <div v-for="book in filteredItems" :key="book.id" @click="redirectToBookPage(book.id)">
             <el-card :body-style="{ padding: '10px' }">
+              <el-button class="add-to-cart" @click.stop="$emit('add-to-cart', book.id)">
+                <el-icon><ShoppingCart /></el-icon>
+              </el-button>
               <el-image :src="book.image" fit="contain">
                 <template #error>
                   <div class="image-slot">
@@ -45,7 +48,7 @@
 </template>
 
 <script>
-import { Picture as IconPicture } from '@element-plus/icons-vue';
+import { Picture as IconPicture, ShoppingCart } from '@element-plus/icons-vue';
 import FilterSelect from './FilterSelect.vue';
 import books from '../assets/books.js';
 import genres from '../assets/genres.js';
@@ -123,7 +126,8 @@ export default {
   },
   components: {
     FilterSelect,
-    IconPicture
+    IconPicture,
+    ShoppingCart
   }
 };
 </script>
@@ -137,6 +141,7 @@ export default {
 
 .el-card {
   max-width: 300px;
+  position: relative;
 }
 
 .el-image {
@@ -171,5 +176,16 @@ export default {
   font-weight: 400;
   font-size: 14px;
   color: #78818d;
+}
+
+.add-to-cart {
+  position: absolute;
+  right: 10px;
+  z-index: 1;
+  display: none;
+}
+
+.el-card:hover .add-to-cart {
+  display: initial;
 }
 </style>

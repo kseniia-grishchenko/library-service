@@ -10,6 +10,7 @@
       <el-form-item class="form-item btn">
         <el-button type="primary" @click="submitForm">Register</el-button>
       </el-form-item>
+      <el-link href="#/sign-in">Already have an account? Sign in</el-link>
     </el-form>
   </el-container>
 </template>

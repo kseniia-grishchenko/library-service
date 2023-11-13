@@ -2,12 +2,16 @@
   <div class="header">
     <span><el-link href="#/">Our logo</el-link></span>
     <el-input v-model="input" placeholder="Type something" :prefix-icon="Search" />
-    <el-button>
-      <el-icon><User /></el-icon>
-    </el-button>
-    <el-button>
-      <el-icon><ShoppingCart /></el-icon>
-    </el-button>
+    <el-link href="#/user-profile">
+      <el-button>
+        <el-icon><User /></el-icon>
+      </el-button>
+    </el-link>
+    <el-link href="#/cart">
+      <el-button>
+        <el-icon><ShoppingCart /></el-icon>
+      </el-button>
+    </el-link>
   </div>
 </template>
 

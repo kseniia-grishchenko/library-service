@@ -1,17 +1,26 @@
 <template>
   <el-row v-if="active">
     <el-col :span="10">
-      <el-image :src="book.image" fit="contain">
-        <template #error>
-          <div class="image-slot">
-            <el-icon><icon-picture /></el-icon>
-          </div>
-        </template>
-      </el-image>
+      <div>
+        <el-image :src="book.image" fit="contain">
+          <template #error>
+            <div class="image-slot">
+              <el-icon><icon-picture /></el-icon>
+            </div>
+          </template>
+        </el-image>
+        <leave-review-card></leave-review-card>
+      </div>
     </el-col>
     <el-col :span="2"></el-col>
     <el-col :span="12">
-      <h3>{{ book.title }}</h3>
+      <div class="header">
+        <h3>{{ book.title }}</h3>
+        <el-button @click="$emit('add-to-cart', book.id)">{{
+          !inCart ? 'Add to cart' : 'Remove from cart'
+        }}</el-button>
+      </div>
+
       <div class="authors">
         <span class="author" v-for="(author, index) in book.authors" :key="index">
           {{ author.full_name }}
@@ -32,12 +41,19 @@
 import { Picture as IconPicture } from '@element-plus/icons-vue';
 import books from '../assets/books.js';
 import ReviewList from './ReviewList.vue';
+import LeaveReviewCard from './LeaveReviewCard.vue';
 
 export default {
   data: () => ({
     active: false,
     book: {}
   }),
+  props: {
+    inCart: {
+      type: Boolean,
+      default: false
+    }
+  },
   methods: {
     hashChangeHandler() {
       const match = location.hash.match(/book\?id=(\d+)/);
@@ -54,7 +70,7 @@ export default {
   },
   watch: {
     book(book) {
-      this.$emit('book-selected', book.title);
+      this.$emit('book-selected', book);
     }
   },
   created() {
@@ -63,7 +79,8 @@ export default {
   },
   components: {
     ReviewList,
-    IconPicture
+    IconPicture,
+    LeaveReviewCard
   }
 };
 </script>
@@ -138,6 +155,7 @@ h3 {
   background: var(--el-fill-color-light);
   color: var(--el-text-color-secondary);
   font-size: 30px;
+  min-height: 400px;
 }
 .image-slot .el-icon {
   font-size: 30px;
@@ -147,5 +165,11 @@ h3 {
   padding: 0 5px;
   width: 100%;
   height: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>
