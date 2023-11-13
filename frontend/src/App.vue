@@ -2,7 +2,7 @@
   <el-container class="main-container">
     <el-header>
       <header-comp></header-comp>
-      <book-header :bookTitle="bookTitle"></book-header>
+      <book-header :bookTitle="bookTitle" v-if="showBookHeader"></book-header>
     </el-header>
     <el-main class="main-section">
       <sign-up></sign-up>
@@ -23,12 +23,20 @@ import BookHeader from './HeaderComp/BookHeader.vue';
 
 export default {
   data: () => ({
-    bookTitle: ''
+    bookTitle: '',
+    showBookHeader: false
   }),
   methods: {
     handleBookChange(title) {
       this.bookTitle = title;
+    },
+    hashChangeHandler() {
+      this.showBookHeader = !!location.hash.match(/#\/$|book\?id=(\d+)/);
     }
+  },
+  created() {
+    window.addEventListener('hashchange', this.hashChangeHandler);
+    this.hashChangeHandler();
   },
   components: {
     HeaderComp,
