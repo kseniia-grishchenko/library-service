@@ -27,7 +27,7 @@ class BookListAPIView(ListCreateAPIView):
             author_list = authors.split(',')
             author_query = Q()
             for author in author_list:
-                author_query |= Q(authors__first_name__icontains=author) | Q(authors__last_name__icontains=author)
+                author_query |= Q(authors__full_name__icontains=author)
             queryset = queryset.filter(author_query)
 
         if genres:
