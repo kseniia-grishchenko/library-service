@@ -20,7 +20,7 @@ class Book(models.Model):
     description = models.TextField()
     genres = models.ManyToManyField(Genre, blank=True)
     daily_annual_fee = models.DecimalField(
-        "Daily annual fee", max_digits=7, decimal_places=2, default=0.02
+        "Daily annual fee", max_digits=7, decimal_places=2, default=0.01
     )
 
     def __str__(self) -> str:

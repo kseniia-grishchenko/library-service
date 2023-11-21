@@ -4,7 +4,7 @@ from borrowings.models import Borrowing
 
 
 class Payment(models.Model):
-    FINE_MULTIPLIER = 2
+    FINE_MULTIPLIER = 1.01
 
     class StatusChoices(models.TextChoices):
         PENDING = "PENDING"

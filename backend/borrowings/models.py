@@ -8,7 +8,7 @@ from .utils import calculate_expected_return_date
 
 class Borrowing(models.Model):
     BORROW_TERM = 21
-    EXPIRED_DATA_PRICE_FACTOR = 1.1
+    EXPIRED_DATA_PRICE_FACTOR = 1.01
 
     borrow_date = models.DateField(auto_now_add=True)
     expected_return_date = models.DateField(
