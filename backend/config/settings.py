@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'borrowings',
     'payments',
     'drf_spectacular',
+    'users',
 ]
 
 REST_FRAMEWORK = {

@@ -22,6 +22,7 @@ api = [
     path("books/", include("books.urls")),
     path("borrowing/", include("borrowings.urls")),
     path("payments/", include("payments.urls")),
+    path("users/", include("users.urls")),
 ]
 
 urlpatterns = [
