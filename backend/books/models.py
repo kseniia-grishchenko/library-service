@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class Genre(models.Model):
     name = models.CharField(max_length=63)
 
@@ -26,3 +25,11 @@ class Book(models.Model):
 
     def __str__(self) -> str:
         return self.title
+
+    @property
+    def is_available(self):
+        return self.check_availability()
+
+    def check_availability(self):
+        from borrowings.models import Borrowing
+        return Borrowing.objects.filter(book_id=self.id, is_actie=True).count() > 0

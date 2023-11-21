@@ -10,6 +10,7 @@ class Borrowing(models.Model):
     expected_return_date = models.DateField()
     actual_return_date = models.DateField(null=True, blank=True)
     book = models.ForeignKey(Book, on_delete=models.PROTECT)
+    is_active = models.BooleanField(default=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
 
     class Meta:
@@ -36,12 +37,10 @@ class Borrowing(models.Model):
 
     @property
     def fine_price(self):
-        if self.actual_return_date is None:
-            return None
         return (
-            self.book.daily_annual_fee
-            * (self.actual_return_date - self.expected_return_date).days
-        )
+                self.book.daily_annual_fee
+                * (self.actual_return_date - self.expected_return_date).days
+        ) if self.actual_return_date else None
 
     def __str__(self) -> str:
         return f"{self.book}: {self.borrow_date} - {self.expected_return_date}."
