@@ -17,7 +17,7 @@ class Payment(models.Model):
     status = models.CharField(
         max_length=20, choices=StatusChoices.choices, default=StatusChoices.PENDING
     )
-    type = models.CharField(max_length=20, choices=TypeChoices.choices)
+    type_status = models.CharField(max_length=20, choices=TypeChoices.choices)
     borrowing = models.ForeignKey(
         Borrowing, on_delete=models.PROTECT, related_name="payments"
     )
@@ -28,4 +28,4 @@ class Payment(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"{self.borrowing.id} - {self.type} - {self.status}"
+        return f"{self.borrowing.id} - {self.type_status} - {self.status}"
