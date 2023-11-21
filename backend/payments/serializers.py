@@ -13,14 +13,5 @@ class PaymentSerializer(serializers.ModelSerializer):
             "status",
             "type_status",
             "session_url",
-            "session_id",
             "money_to_pay",
         )
-        read_only_fields = (
-            "id",
-            "money_to_pay",
-        )
-
-
-class PaymentRetrieveSerializer(PaymentSerializer):
-    borrowing = BorrowingRetrieveSerializer()
