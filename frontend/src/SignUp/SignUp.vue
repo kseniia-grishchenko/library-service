@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import { postRequestUnauthorized } from '../api.js';
+
 export default {
   data() {
     return {
@@ -38,9 +40,32 @@ export default {
   },
   methods: {
     submitForm() {
-      this.$refs.registrationForm.validate((valid) => {
+      this.$refs.registrationForm.validate(async (valid) => {
         if (!valid) return;
         // Handle registration logic here
+        console.log(this.form);
+
+        try {
+          await postRequestUnauthorized('/api/users/', {
+            email: this.form.email,
+            password: this.form.password,
+            first_name: '',
+            last_name: ''
+          });
+          this.$notify({
+            title: 'Success',
+            message: 'Account created',
+            type: 'success',
+            showClose: false
+          });
+          location.hash = '#/sign-in';
+        } catch (err) {
+          this.$notify.error({
+            title: 'Error occurred',
+            message: JSON.stringify(err.response.data),
+            showClose: false
+          });
+        }
       });
     },
     hashChangeHandler() {

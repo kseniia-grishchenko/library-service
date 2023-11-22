@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import { postRequest } from '../api';
+
 export default {
   data() {
     return {
@@ -25,10 +27,6 @@ export default {
         password: ''
       },
       rules: {
-        email: [
-          { required: true, message: 'Please input email or username', trigger: 'blur' },
-          { type: 'email', message: 'Please input a valid email', trigger: ['blur', 'change'] }
-        ],
         password: [
           { required: true, message: 'Please input password', trigger: 'blur' },
           { min: 6, message: 'Password length should be at least 6 characters', trigger: 'blur' }
@@ -38,9 +36,28 @@ export default {
   },
   methods: {
     submitForm() {
-      this.$refs.registrationForm.validate((valid) => {
+      this.$refs.registrationForm.validate(async (valid) => {
         if (!valid) return;
-        // Handle authorization logic here
+        console.log(this.form);
+        try {
+          const {
+            data: { access, refresh }
+          } = await postRequest('/api/users/token/', {
+            username: this.form.email,
+            password: this.form.password
+          });
+
+          localStorage.setItem('access', access);
+          localStorage.setItem('refresh', refresh);
+
+          this.$emit('log-in');
+        } catch (err) {
+          this.$notify.error({
+            title: 'Error occurred',
+            message: JSON.stringify(err.response.data),
+            showClose: false
+          });
+        }
       });
     },
     hashChangeHandler() {

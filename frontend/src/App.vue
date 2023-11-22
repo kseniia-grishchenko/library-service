@@ -6,8 +6,8 @@
     </el-header>
     <el-main class="main-section">
       <auth-wrapper></auth-wrapper>
-      <sign-up></sign-up>
-      <sign-in></sign-in>
+      <sign-up v-if="!user"></sign-up>
+      <sign-in v-if="!user" @log-in="handleLogIn"></sign-in>
       <catalog-page @add-to-cart="handleAddToCart"></catalog-page>
       <book-page
         @book-selected="handleBookChange"
@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import { jwtDecode } from 'jwt-decode';
+
 import { ElMessage, ElNotification } from 'element-plus';
 import BookPage from './BookPage/BookPage.vue';
 import CatalogPage from './CatalogPage/CatalogPage.vue';
@@ -33,6 +35,7 @@ import AuthWrapper from './AuthWrapper.vue';
 import UserProfile from './UserProfile/UserProfile.vue';
 import CartPage from './CartPage/CartPage.vue';
 import CheckoutPage from './CheckoutPage/CheckoutPage.vue';
+import { getRequest, postRequest } from './api';
 
 export default {
   data: () => ({
@@ -41,6 +44,53 @@ export default {
     currentBookInCart: false
   }),
   methods: {
+    async logIn() {
+      const accessToken = localStorage.getItem('access');
+      if (!accessToken) return;
+
+      const { exp } = jwtDecode(accessToken);
+      this.expiresAt = exp;
+
+      if (this.expiresAt * 1e3 > Date.now()) {
+        await this.fetchUser();
+        return;
+      }
+
+      this.refreshToken();
+    },
+
+    async fetchUser() {
+      try {
+        const { data: user } = await getRequest('/api/users/me/');
+
+        this.user = user;
+      } catch (err) {
+        console.log(err);
+        console.error(err.response.data);
+      }
+    },
+
+    async refreshToken() {
+      try {
+        const { data } = await postRequest('/api/users/token/refresh/', {
+          refresh: localStorage.getItem('refresh')
+        });
+
+        const { access, refresh } = data;
+
+        localStorage.setItem('access', access);
+        localStorage.setItem('refresh', refresh);
+        this.logIn();
+      } catch (err) {
+        console.error(err.response.data);
+      }
+    },
+
+    async handleLogIn() {
+      await this.logIn();
+      location.hash = '#/';
+    },
+
     handleBookChange(book) {
       this.currentBookInCart = false;
       this.bookTitle = book.title;
