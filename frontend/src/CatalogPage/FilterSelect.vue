@@ -2,7 +2,7 @@
   <div class="filter">
     <div class="header">
       <span>{{ sectionName }}</span>
-      <el-button @click="resetFilters">Clear all</el-button>
+      <el-button @click="resetFilters">Очистити</el-button>
     </div>
     <div>
       <el-checkbox-group v-model="modifiedOptions">

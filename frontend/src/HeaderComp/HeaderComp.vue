@@ -1,7 +1,7 @@
 <template>
   <div class="header">
-    <span><el-link href="#/">Our logo</el-link></span>
-    <el-input v-model="input" placeholder="Type something" :prefix-icon="Search" />
+    <span><el-link href="#/">Online бібліотека</el-link></span>
+    <el-input v-model="input" placeholder="Я шукаю..." :prefix-icon="Search" />
     <el-link href="#/user-profile">
       <el-button>
         <el-icon><User /></el-icon>

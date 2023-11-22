@@ -3,14 +3,14 @@
     <el-container>
       <el-aside>
         <filter-select
-          section-name="Genres"
+          section-name="Жанри"
           :filter-options="genres"
           :checked-options="checkedGenres"
           @filter-changed="handleGenreFilterChange"
           @filter-reset="resetGenres"
         ></filter-select>
         <filter-select
-          section-name="Authors"
+          section-name="Автори"
           :filter-options="authors"
           :checked-options="checkedAuthors"
           @filter-changed="handleAuthorFilterChange"
@@ -19,28 +19,31 @@
       </el-aside>
       <el-main>
         <div class="items-container">
-          <div v-for="book in filteredItems" :key="book.id" @click="redirectToBookPage(book.id)">
-            <el-card :body-style="{ padding: '10px' }">
-              <el-button class="add-to-cart" @click.stop="$emit('add-to-cart', book.id)">
-                <el-icon><ShoppingCart /></el-icon>
-              </el-button>
-              <el-image :src="book.image" fit="contain">
-                <template #error>
-                  <div class="image-slot">
-                    <el-icon><icon-picture /></el-icon>
-                  </div>
-                </template>
-              </el-image>
-              <div style="padding: 14px">
-                <span class="title">{{ book.title }}</span>
-                <div class="bottom">
-                  <span class="author" v-for="(author, index) in book.authors" :key="index">
-                    {{ author.full_name }}
-                  </span>
+          <el-card
+            :body-style="{ padding: '10px' }"
+            v-for="book in filteredItems"
+            :key="book.id"
+            @click="redirectToBookPage(book.id)"
+          >
+            <el-button class="add-to-cart" @click.stop="$emit('add-to-cart', book)">
+              <el-icon><ShoppingCart /></el-icon>
+            </el-button>
+            <el-image :src="book.image" fit="contain">
+              <template #error>
+                <div class="image-slot">
+                  <el-icon><icon-picture /></el-icon>
                 </div>
+              </template>
+            </el-image>
+            <div style="padding: 14px">
+              <span class="title">{{ book.title }}</span>
+              <div class="bottom">
+                <span class="author" v-for="(author, index) in book.authors" :key="index">
+                  {{ author.full_name }}
+                </span>
               </div>
-            </el-card>
-          </div>
+            </div>
+          </el-card>
         </div>
       </el-main>
     </el-container>
@@ -50,17 +53,15 @@
 <script>
 import { Picture as IconPicture, ShoppingCart } from '@element-plus/icons-vue';
 import FilterSelect from './FilterSelect.vue';
-import books from '../assets/books.js';
-import genres from '../assets/genres.js';
-import authors from '../assets/authors.js';
+import { getRequest } from '../api';
 
 export default {
   data() {
     return {
       active: false,
-      books,
-      genres,
-      authors,
+      books: [],
+      genres: [],
+      authors: [],
       checkedGenres: [],
       checkedAuthors: []
     };
@@ -118,6 +119,30 @@ export default {
     },
     hashChangeHandler() {
       this.active = !!location.hash.match(/#\/$/);
+    },
+
+    async fetchBooks() {
+      const { data: books } = await getRequest('/api/books');
+      this.books = books;
+    },
+
+    async fetchGenres() {
+      const { data: genres } = await getRequest('/api/books/genres');
+      this.genres = genres;
+    },
+
+    async fetchAuthors() {
+      const { data: authors } = await getRequest('/api/books/authors');
+      this.authors = authors;
+    }
+  },
+  watch: {
+    active(value) {
+      if (!value) return;
+
+      this.fetchBooks();
+      this.fetchGenres();
+      this.fetchAuthors();
     }
   },
   created() {

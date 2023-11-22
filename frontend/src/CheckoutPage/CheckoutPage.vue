@@ -2,30 +2,30 @@
   <el-card class="checkout-page" v-if="active">
     <template #header>
       <div class="header">
-        <span>Checkout</span>
+        <span>Оформлення замовлення</span>
       </div>
     </template>
 
     <el-form ref="form" :model="checkoutForm" label-position="top" v-if="selectedBooks.length">
-      <el-form-item label="Full Name">
+      <el-form-item label="Повне імʼя">
         <el-input v-model="checkoutForm.fullName"></el-input>
       </el-form-item>
-      <el-form-item label="Address">
+      <el-form-item label="Адреса">
         <el-input
           type="textarea"
           v-model="checkoutForm.address"
           rows="2"
-          placeholder="Your full address"
+          placeholder="Введіть повну адресу"
         ></el-input>
       </el-form-item>
-      <el-form-item label="Contact Number">
+      <el-form-item label="Телефонний номер">
         <el-input v-model="checkoutForm.contactNumber"></el-input>
       </el-form-item>
 
       <div>
         <el-table :data="selectedBooks" style="width: 100%">
-          <el-table-column prop="title" label="Title"></el-table-column>
-          <el-table-column label="Authors" v-slot="{ row }">
+          <el-table-column prop="title" label="Назва"></el-table-column>
+          <el-table-column label="Автори" v-slot="{ row }">
             <span v-for="(author, index) in row.authors" :key="author.full_name">
               {{ author.full_name }}<span v-if="index < row.authors.length - 1">, </span>
             </span>
@@ -34,18 +34,16 @@
       </div>
 
       <div class="action-buttons">
-        <el-button type="primary" @click="confirmCheckout">Confirm Checkout</el-button>
-        <el-button @click="cancelCheckout">Cancel</el-button>
+        <el-button type="primary" @click="confirmCheckout">Підтвердити замовлення</el-button>
+        <el-button @click="cancelCheckout">Відмінити</el-button>
       </div>
     </el-form>
 
-    <div v-else class="empty-checkout">No books selected for checkout.</div>
+    <div v-else class="empty-checkout">Кошик порожній</div>
   </el-card>
 </template>
 
 <script>
-import books from '../assets/books.js';
-
 export default {
   data() {
     return {
@@ -77,8 +75,7 @@ export default {
     window.addEventListener('hashchange', this.hashChangeHandler);
     this.hashChangeHandler();
 
-    const bookIds = JSON.parse(localStorage.getItem('books')) || [];
-    this.selectedBooks = books.filter((book) => bookIds.includes(book.id));
+    this.selectedBooks = JSON.parse(localStorage.getItem('books')) || [];
   }
 };
 </script>

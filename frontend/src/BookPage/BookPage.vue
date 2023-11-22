@@ -1,7 +1,7 @@
 <template>
-  <el-row v-if="active">
+  <el-row v-if="active" v-loading="loading" class="book-page">
     <el-col :span="10">
-      <div>
+      <div class="left-section">
         <el-image :src="book.image" fit="contain">
           <template #error>
             <div class="image-slot">
@@ -16,7 +16,7 @@
     <el-col :span="12">
       <div class="header">
         <h3>{{ book.title }}</h3>
-        <el-button @click="$emit('add-to-cart', book.id)">{{
+        <el-button @click="$emit('add-to-cart', book)">{{
           !inCart ? 'Add to cart' : 'Remove from cart'
         }}</el-button>
       </div>
@@ -38,15 +38,17 @@
 </template>
 
 <script>
+import { getRequest } from '../api.js';
+
 import { Picture as IconPicture } from '@element-plus/icons-vue';
-import books from '../assets/books.js';
 import ReviewList from './ReviewList.vue';
 import LeaveReviewCard from './LeaveReviewCard.vue';
 
 export default {
   data: () => ({
     active: false,
-    book: {}
+    book: {},
+    loading: false
   }),
   props: {
     inCart: {
@@ -63,9 +65,12 @@ export default {
       const [, bookId] = match;
       this.fetchBook(bookId);
     },
-    fetchBook(bookId) {
-      // replace with API call to /books?id=
-      this.book = books.find((book) => book.id === Number(bookId));
+    async fetchBook(bookId) {
+      this.loading = true;
+
+      const { data: book } = await getRequest(`api/books/${bookId}`);
+      this.book = book;
+      this.loading = false;
     }
   },
   watch: {
@@ -86,6 +91,9 @@ export default {
 </script>
 
 <style scoped>
+.book-page {
+  min-width: 100%;
+}
 h3 {
   margin: 0;
   font-size: 24px;
@@ -134,7 +142,7 @@ h3 {
 }
 
 .genres:before {
-  content: 'Genres: ';
+  content: 'Жанри: ';
   font-weight: 500;
   font-size: 15px;
   color: #222;
@@ -171,5 +179,9 @@ h3 {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.left-section {
+  min-width: 380px;
 }
 </style>

@@ -101,13 +101,14 @@ export default {
     hashChangeHandler() {
       this.showBookHeader = !!location.hash.match(/#\/$|book\?id=(\d+)/);
     },
-    handleAddToCart(bookId) {
+    handleAddToCart(book) {
       const booksInCart = JSON.parse(localStorage.getItem('books')) || [];
       let modifiedBooksInCart = [...booksInCart];
-      if (booksInCart.includes(bookId)) {
-        modifiedBooksInCart = booksInCart.filter((id) => id !== bookId);
+      const booksIds = booksInCart.map(({ id }) => id);
+      if (booksIds.includes(book.id)) {
+        modifiedBooksInCart = booksInCart.filter((b) => b.id !== book.id);
       } else {
-        modifiedBooksInCart.push(bookId);
+        modifiedBooksInCart.push(book);
       }
       if (modifiedBooksInCart.length > 3) {
         ElMessage({
@@ -127,7 +128,8 @@ export default {
           message: 'Book removed from the cart'
         });
       }
-      this.currentBookInCart = modifiedBooksInCart.includes(bookId);
+      const modifiedBookIds = modifiedBooksInCart.map(({ id }) => id);
+      this.currentBookInCart = modifiedBookIds.includes(book.id);
       localStorage.setItem('books', JSON.stringify(Array.from(new Set(modifiedBooksInCart))));
     }
   },

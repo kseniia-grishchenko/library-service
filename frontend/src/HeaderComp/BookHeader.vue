@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-header>
-      <el-page-header title="All books" @back="handleBack">
+      <el-page-header title="Всі книги" @back="handleBack">
         <template #content v-if="bookTitle">
           <span>{{ bookTitle }}</span>
         </template>

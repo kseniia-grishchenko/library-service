@@ -2,28 +2,28 @@
   <el-card class="cart-page" v-if="active">
     <template #header>
       <div class="header">
-        <span>Your Cart</span>
+        <span>Ваш кошик</span>
       </div>
     </template>
 
     <div v-if="cartItems.length">
       <el-table :data="cartItems" style="width: 100%">
-        <el-table-column prop="title" label="Title"></el-table-column>
-        <el-table-column label="Authors" v-slot="{ row }">
+        <el-table-column prop="title" label="Назва"></el-table-column>
+        <el-table-column label="Автори" v-slot="{ row }">
           <span v-for="(author, index) in row.authors" :key="author.full_name">
             {{ author.full_name }}<span v-if="index < row.authors.length - 1">, </span>
           </span>
         </el-table-column>
-        <el-table-column label="Operation">
+        <el-table-column label="Редагувати">
           <template v-slot="{ row }">
-            <el-button type="danger" size="mini" @click="removeFromCart(row)">Remove</el-button>
+            <el-button type="danger" size="mini" @click="removeFromCart(row)">Видалити</el-button>
           </template>
         </el-table-column>
       </el-table>
 
       <div class="checkout">
         <el-link href="#/checkout">
-          <el-button type="primary" @click="proceedToCheckout">Proceed to Checkout</el-button>
+          <el-button type="primary" @click="proceedToCheckout">Перейти до оформлення</el-button>
         </el-link>
       </div>
     </div>
@@ -33,8 +33,6 @@
 </template>
 
 <script>
-import books from '../assets/books.js';
-
 export default {
   data() {
     return {
@@ -45,9 +43,8 @@ export default {
   methods: {
     removeFromCart(item) {
       this.cartItems = this.cartItems.filter((cartItem) => cartItem.id !== item.id);
-      const bookIds = this.cartItems.map((item) => item.id);
-      console.log(bookIds);
-      localStorage.setItem('books', JSON.stringify(bookIds));
+
+      localStorage.setItem('books', JSON.stringify(this.cartItems));
     },
     proceedToCheckout() {
       // Logic to proceed to checkout
@@ -62,8 +59,7 @@ export default {
     window.addEventListener('hashchange', this.hashChangeHandler);
     this.hashChangeHandler();
 
-    const bookIds = JSON.parse(localStorage.getItem('books')) || [];
-    this.cartItems = books.filter((book) => bookIds.includes(book.id));
+    this.cartItems = JSON.parse(localStorage.getItem('books')) || [];
   }
 };
 </script>
