@@ -8,7 +8,7 @@ class Order(models.Model):
     address = models.CharField(max_length=255)
     phone = models.CharField(max_length=13)
     is_sent = models.BooleanField(default=False)
-    borrowing = models.ForeignKey(Borrowing, on_delete=models.CASCADE)
+    borrowings = models.ManyToManyField(Borrowing)
 
     def __str__(self) -> str:
         return f"{self.username} {self.phone}"
