@@ -38,4 +38,4 @@ class Book(models.Model):
 
     def check_availability(self):
         from borrowings.models import Borrowing
-        return Borrowing.objects.filter(book_id=self.id, is_active=True).count() > 0
+        return Borrowing.objects.filter(book_id=self.id, is_active=True).count() == 0

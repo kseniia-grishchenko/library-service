@@ -17,8 +17,8 @@
       <div class="header">
         <h3>{{ book.title }}</h3>
         <el-button @click="$emit('add-to-cart', book)" :disabled="!isBookAvailable">{{
-            !inCart ? 'Add to cart' : 'Remove from cart'
-          }}</el-button>
+          !inCart ? 'Add to cart' : 'Remove from cart'
+        }}</el-button>
       </div>
 
       <div class="authors">
@@ -73,7 +73,7 @@ export default {
       this.book = book;
       this.loading = false;
 
-      this.checkBookAvailability(book.id);
+      this.checkBookAvailability(bookId);
     },
     async checkBookAvailability(bookId) {
       try {
