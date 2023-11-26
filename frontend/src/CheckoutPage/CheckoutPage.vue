@@ -58,14 +58,23 @@ export default {
   },
   methods: {
     confirmCheckout() {
-      // Logic to confirm the checkout process
-      console.log('Checkout confirmed with books:', this.selectedBooks);
-      // Redirect to confirmation page or display a success message
+      const orderData = {
+        fullName: this.checkoutForm.fullName,
+        address: this.checkoutForm.address,
+        contactNumber: this.checkoutForm.contactNumber,
+        books: this.selectedBooks.map((book) => book.id)
+      };
+      this.createOrder(orderData);
+    },
+    createOrder(orderData) {
+      console.log('Simulating order creation:', orderData);
+
+      this.$refs.form.resetFields();
+      this.selectedBooks = [];
     },
     cancelCheckout() {
-      // Logic to handle cancellation of checkout
       console.log('Checkout cancelled');
-      // Redirect back to cart or previous page
+      location.hash = 'cart';
     },
     hashChangeHandler() {
       this.active = !!location.hash.match(/checkout/);

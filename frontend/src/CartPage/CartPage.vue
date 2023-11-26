@@ -22,9 +22,7 @@
       </el-table>
 
       <div class="checkout">
-        <el-link href="#/checkout">
-          <el-button type="primary" @click="proceedToCheckout">Перейти до оформлення</el-button>
-        </el-link>
+        <el-button type="primary" @click="proceedToCheckout">Перейти до оформлення</el-button>
       </div>
     </div>
 
@@ -33,6 +31,7 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
@@ -46,10 +45,13 @@ export default {
 
       localStorage.setItem('books', JSON.stringify(this.cartItems));
     },
-    proceedToCheckout() {
-      // Logic to proceed to checkout
-      console.log('Proceeding to checkout with items:', this.cartItems);
-      // Redirect to checkout page or handle checkout logic
+    async proceedToCheckout() {
+      location.hash = 'checkout';
+      await this.$nextTick();
+
+      this.$emit('checkout-request', this.cartItems);
+
+      localStorage.setItem('books', JSON.stringify(this.cartItems));
     },
     hashChangeHandler() {
       this.active = !!location.hash.match(/cart/);
