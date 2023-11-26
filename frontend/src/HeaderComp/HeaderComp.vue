@@ -1,13 +1,17 @@
 <template>
   <div class="header">
-    <span class="text-large font-600 mr-3">Our logo</span>
-    <el-input v-model="input" placeholder="Type something" :prefix-icon="Search" />
-    <el-button>
-      <el-icon><User /></el-icon>
-    </el-button>
-    <el-button>
-      <el-icon><ShoppingCart /></el-icon>
-    </el-button>
+    <span><el-link href="#/">Online бібліотека</el-link></span>
+    <el-input v-model="input" placeholder="Я шукаю..." :prefix-icon="Search" />
+    <el-link href="#/user-profile">
+      <el-button>
+        <el-icon><User /></el-icon>
+      </el-button>
+    </el-link>
+    <el-link href="#/cart">
+      <el-button>
+        <el-icon><ShoppingCart /></el-icon>
+      </el-button>
+    </el-link>
   </div>
 </template>
 

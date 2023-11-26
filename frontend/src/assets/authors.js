@@ -1,0 +1,20 @@
+export default [
+  { id: 1, full_name: 'F. Scott Fitzgerald' },
+  { id: 2, full_name: 'Harper Lee' },
+  { id: 3, full_name: 'George Orwell' },
+  { id: 4, full_name: 'Jane Austen' },
+  { id: 5, full_name: 'J.D. Salinger' },
+  { id: 6, full_name: 'J.R.R. Tolkien' },
+  { id: 7, full_name: 'Herman Melville' },
+  { id: 8, full_name: 'Leo Tolstoy' },
+  { id: 9, full_name: 'William Shakespeare' },
+  { id: 10, full_name: 'Paulo Coelho' },
+  { id: 11, full_name: 'Toni Morrison' },
+  { id: 12, full_name: 'Dante Alighieri' },
+  { id: 13, full_name: 'Ralph Ellison' },
+  { id: 14, full_name: 'Miguel de Cervantes' },
+  { id: 15, full_name: 'Charlotte Brontë' },
+  { id: 16, full_name: 'Fyodor Dostoevsky' },
+  { id: 17, full_name: 'Gabriel García Márquez' },
+  { id: 18, full_name: 'Oscar Wilde' }
+];
