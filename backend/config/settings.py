@@ -218,3 +218,6 @@ JAZZMIN_SETTINGS = {
 }
 
 STRIPE_SECRET_KEY=os.getenv('STRIPE_SECRET_KEY')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
