@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'payments',
     'drf_spectacular',
     'users',
+    'order',
 ]
 
 REST_FRAMEWORK = {

@@ -25,6 +25,7 @@ api = [
     path("borrowing/", include("borrowings.urls")),
     path("payments/", include("payments.urls")),
     path("users/", include("users.urls")),
+    path("order/", include("order.urls")),
 ]
 
 urlpatterns = [
