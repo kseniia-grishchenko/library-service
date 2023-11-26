@@ -65,7 +65,12 @@ class BorrowingCreateSerializer(BorrowingSerializer):
 
     def create(self, validated_data):
         book = validated_data["book"]
-        user = validated_data["user"]
+        request = self.context.get("request")
+
+        if request and hasattr(request, "user"):
+            user = request.user
+        else:
+            raise serializers.ValidationError("User information not available.")
 
         if not book.is_available:
             raise ValidationError(f"Book '{book.title}' is out of stock")

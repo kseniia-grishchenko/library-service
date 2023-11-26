@@ -16,13 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from django.conf.urls.static import static
 
+from config import settings
 
 api = [
     path("books/", include("books.urls")),
     path("borrowing/", include("borrowings.urls")),
     path("payments/", include("payments.urls")),
     path("users/", include("users.urls")),
+    path("order/", include("order.urls")),
 ]
 
 urlpatterns = [
@@ -36,3 +39,6 @@ urlpatterns = [
         name="swagger-ui",
     ),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

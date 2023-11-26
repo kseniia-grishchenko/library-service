@@ -1,5 +1,10 @@
 from django.db import models
 
+
+def book_directory_path(instance, filename):
+    return f'books/{instance.title}.{filename.split(".")[-1]}'
+
+
 class Genre(models.Model):
     name = models.CharField(max_length=63)
 
@@ -22,6 +27,7 @@ class Book(models.Model):
     daily_annual_fee = models.DecimalField(
         "Daily annual fee", max_digits=7, decimal_places=2, default=0.01
     )
+    image = models.ImageField(upload_to=book_directory_path, blank=True, null=True)
 
     def __str__(self) -> str:
         return self.title
@@ -32,4 +38,4 @@ class Book(models.Model):
 
     def check_availability(self):
         from borrowings.models import Borrowing
-        return Borrowing.objects.filter(book_id=self.id, is_actie=True).count() > 0
+        return Borrowing.objects.filter(book_id=self.id, is_active=True).count() == 0

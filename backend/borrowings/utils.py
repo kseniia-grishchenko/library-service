@@ -1,7 +1,7 @@
-import datetime
+from datetime import datetime, timedelta
 
 
 def calculate_expected_return_date(borrow_days: int) -> datetime:
-    """Calculates the date on which book has to be returned without any penalties"""
-    current_date = datetime.date.today()
-    return current_date + datetime.timedelta(days=borrow_days)
+    """Calculates the date on which the book has to be returned without any penalties."""
+    current_date = datetime.now()
+    return datetime.now() + timedelta(days=borrow_days)

@@ -44,6 +44,8 @@
 </template>
 
 <script>
+import { postRequest } from '../api.js';
+
 export default {
   data() {
     return {
@@ -57,15 +59,29 @@ export default {
     };
   },
   methods: {
-    confirmCheckout() {
-      // Logic to confirm the checkout process
-      console.log('Checkout confirmed with books:', this.selectedBooks);
-      // Redirect to confirmation page or display a success message
+    async confirmCheckout() {
+      const orderData = {
+        order: {
+          fullname: this.checkoutForm.fullName,
+          address: this.checkoutForm.address,
+          phone: this.checkoutForm.contactNumber,
+          books: this.selectedBooks.map((book) => ({ book_id: book.id }))
+        }
+      };
+
+      try {
+        const response = await postRequest('api/order/create_order/', orderData);
+        console.log('Order created successfully:', response.data);
+
+        this.$refs.form.resetFields();
+        this.selectedBooks = [];
+      } catch (error) {
+        console.error('Error creating order:', error);
+      }
     },
     cancelCheckout() {
-      // Logic to handle cancellation of checkout
       console.log('Checkout cancelled');
-      // Redirect back to cart or previous page
+      location.hash = 'cart';
     },
     hashChangeHandler() {
       this.active = !!location.hash.match(/checkout/);

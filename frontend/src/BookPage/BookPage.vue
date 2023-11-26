@@ -16,7 +16,7 @@
     <el-col :span="12">
       <div class="header">
         <h3>{{ book.title }}</h3>
-        <el-button @click="$emit('add-to-cart', book)">{{
+        <el-button @click="$emit('add-to-cart', book)" :disabled="!isBookAvailable">{{
           !inCart ? 'Add to cart' : 'Remove from cart'
         }}</el-button>
       </div>
@@ -48,7 +48,8 @@ export default {
   data: () => ({
     active: false,
     book: {},
-    loading: false
+    loading: false,
+    isBookAvailable: true
   }),
   props: {
     inCart: {
@@ -71,11 +72,23 @@ export default {
       const { data: book } = await getRequest(`api/books/${bookId}`);
       this.book = book;
       this.loading = false;
+
+      this.checkBookAvailability(bookId);
+    },
+    async checkBookAvailability(bookId) {
+      try {
+        const response = await getRequest(`api/books/is_available/${bookId}/`);
+        this.isBookAvailable = response.data.is_available;
+      } catch (error) {
+        console.error('Error checking book availability:', error);
+      }
     }
   },
   watch: {
     book(book) {
       this.$emit('book-selected', book);
+
+      this.checkBookAvailability(book.id);
     }
   },
   created() {

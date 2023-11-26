@@ -2,6 +2,9 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from .models import Genre, Author, Book
 from .serializers import GenreSerializer, AuthorSerializer, BookSerializer
 from django.db.models import Q
+from django.http import JsonResponse
+from django.views import View
+from django.shortcuts import get_object_or_404
 
 
 class GenreListAPIView(ListCreateAPIView):
@@ -43,3 +46,9 @@ class BookListAPIView(ListCreateAPIView):
 class BookDetailAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+
+
+class BookIsAvailable(View):
+    def get(self, request, pk):
+        book = get_object_or_404(Book, pk=pk)
+        return JsonResponse({'is_available': book.is_available})

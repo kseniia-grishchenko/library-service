@@ -1,9 +1,8 @@
 from django.conf import settings
 from django.db import models
 from django.db.models import Q, F
-
 from books.models import Book
-from .utils import calculate_expected_return_date
+from datetime import datetime, timedelta, date
 
 
 class Borrowing(models.Model):
@@ -13,7 +12,7 @@ class Borrowing(models.Model):
     borrow_date = models.DateField(auto_now_add=True)
     expected_return_date = models.DateField(
         null=True,
-        default=calculate_expected_return_date(borrow_days=BORROW_TERM),
+        default=date.today() + timedelta(days=BORROW_TERM),
     )
     actual_return_date = models.DateField(null=True, blank=True)
     book = models.ForeignKey(Book, on_delete=models.PROTECT)
@@ -37,17 +36,26 @@ class Borrowing(models.Model):
 
     @property
     def total_price(self):
+        expected_return_date = datetime.combine(self.expected_return_date, datetime.min.time()).date()
+        borrow_date = datetime.combine(self.borrow_date, datetime.min.time()).date()
+
         return (
-            self.book.daily_annual_fee
-            * (self.expected_return_date - self.borrow_date).days
+                self.book.daily_annual_fee
+                * (expected_return_date - borrow_date).days
         )
 
     @property
     def fine_price(self):
-        return (
-                self.book.daily_annual_fee or self.BORROW_TERM
-                * (self.actual_return_date - self.expected_return_date).days
-        ) if self.actual_return_date else None
+        if self.actual_return_date:
+            # Ensure both dates are datetime.date objects
+            actual_return_date = datetime.combine(self.actual_return_date, datetime.min.time()).date()
+            expected_return_date = datetime.combine(self.expected_return_date, datetime.min.time()).date()
+
+            return (
+                    self.book.daily_annual_fee or self.BORROW_TERM
+                    * (actual_return_date - expected_return_date).days
+            )
+        return None
 
     def __str__(self) -> str:
         return f"{self.book}: {self.borrow_date} - {self.expected_return_date}."
