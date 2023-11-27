@@ -76,6 +76,7 @@ export default {
       this.checkBookAvailability(bookId);
     },
     async checkBookAvailability(bookId) {
+      if (!bookId) return;
       try {
         const response = await getRequest(`api/books/is_available/${bookId}/`);
         this.isBookAvailable = response.data.is_available;
