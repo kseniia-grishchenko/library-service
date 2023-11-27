@@ -1,7 +1,7 @@
 <template>
   <el-container v-if="active">
     <el-container>
-      <el-aside>
+      <el-aside v-loading="filtersLoading">
         <filter-select
           section-name="Жанри"
           :filter-options="genres"
@@ -18,7 +18,7 @@
         ></filter-select>
       </el-aside>
       <el-main>
-        <div class="items-container">
+        <div class="items-container" v-loading="booksLoading">
           <el-card
             :body-style="{ padding: '10px' }"
             v-for="book in filteredItems"
@@ -63,7 +63,9 @@ export default {
       genres: [],
       authors: [],
       checkedGenres: [],
-      checkedAuthors: []
+      checkedAuthors: [],
+      filtersLoading: false,
+      booksLoading: false
     };
   },
   computed: {
@@ -122,8 +124,10 @@ export default {
     },
 
     async fetchBooks() {
+      this.booksLoading = true;
       const { data: books } = await getRequest('/api/books');
       this.books = books;
+      this.booksLoading = false;
     },
 
     async fetchGenres() {
@@ -137,12 +141,15 @@ export default {
     }
   },
   watch: {
-    active(value) {
+    async active(value) {
       if (!value) return;
 
       this.fetchBooks();
-      this.fetchGenres();
-      this.fetchAuthors();
+
+      this.filtersLoading = true;
+      await this.fetchGenres();
+      await this.fetchAuthors();
+      this.filtersLoading = false;
     }
   },
   created() {
