@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import { ElMessage } from 'element-plus';
 import { postRequest } from '../api.js';
 
 export default {
@@ -62,7 +63,7 @@ export default {
     async confirmCheckout() {
       const orderData = {
         order: {
-          fullname: this.checkoutForm.fullName,
+          username: this.checkoutForm.fullName,
           address: this.checkoutForm.address,
           phone: this.checkoutForm.contactNumber,
           books: this.selectedBooks.map((book) => ({ book_id: book.id }))
@@ -70,13 +71,20 @@ export default {
       };
 
       try {
-        const response = await postRequest('api/order/create_order/', orderData);
+        const response = await postRequest('/api/order/create_order/', orderData);
         console.log('Order created successfully:', response.data);
+
+        ElMessage({
+          message: 'Замовлення успішно створено',
+          type: 'success'
+        });
 
         this.$refs.form.resetFields();
         this.selectedBooks = [];
+        localStorage.removeItem('books');
       } catch (error) {
         console.error('Error creating order:', error);
+        ElMessage.error('Помилка при створенні замовлення');
       }
     },
     cancelCheckout() {

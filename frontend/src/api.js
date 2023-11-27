@@ -1,5 +1,8 @@
 import axios from 'axios';
 
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
 const getRequest = (uri, params = {}) => {
   return axios
     .get(uri, {
