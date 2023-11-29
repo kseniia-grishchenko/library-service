@@ -70,3 +70,11 @@ def change_order_status(request, order_id):
     order.save()
 
     return Response({'status': 'Order status changed successfully'}, status=status.HTTP_200_OK)
+
+
+class UserOrderListView(generics.ListAPIView):
+    serializer_class = OrderSerializer
+
+    def get_queryset(self):
+        queryset = Order.objects.filter(borrowing__user=self.request.user).order_by('-id')
+        return queryset
