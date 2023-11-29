@@ -8,7 +8,7 @@ class Order(models.Model):
     address = models.CharField(max_length=255)
     phone = models.CharField(max_length=13)
     is_sent = models.BooleanField(default=False)
-    borrowings = models.ManyToManyField(Borrowing)
+    borrowings = models.ManyToManyField(Borrowing, related_name='orders')
 
     def __str__(self) -> str:
         return f"{self.username} {self.phone}"

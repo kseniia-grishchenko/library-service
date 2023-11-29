@@ -11,7 +11,7 @@ from borrowings.models import Borrowing
 from payments.models import Payment
 from payments.serializers import PaymentSerializer
 from .models import Order
-from .serializers import OrderSerializer
+from .serializers import OrderSerializer, OrderListSerializer
 
 
 class OrderCreateView(generics.CreateAPIView):
@@ -75,7 +75,7 @@ def change_order_status(request, order_id):
 
 
 class UserOrderListView(generics.ListAPIView):
-    serializer_class = OrderSerializer
+    serializer_class = OrderListSerializer
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
