@@ -1,15 +1,17 @@
-from rest_framework import generics, status
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from django.utils import timezone
+import uuid
 from datetime import timedelta
 
+from django.utils import timezone
+from rest_framework import generics, status
+from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
+from borrowings.models import Borrowing
 from payments.models import Payment
 from payments.serializers import PaymentSerializer
 from .models import Order
 from .serializers import OrderSerializer
-from borrowings.models import Borrowing
-import uuid
 
 
 class OrderCreateView(generics.CreateAPIView):
@@ -74,7 +76,8 @@ def change_order_status(request, order_id):
 
 class UserOrderListView(generics.ListAPIView):
     serializer_class = OrderSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        queryset = Order.objects.filter(borrowing__user=self.request.user).order_by('-id')
+        queryset = Order.objects.filter(borrowings__user=self.request.user).order_by('-id')
         return queryset
