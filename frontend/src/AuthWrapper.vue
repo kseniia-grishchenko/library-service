@@ -9,8 +9,7 @@ export default {
   }),
   methods: {
     hashChangeHandler() {
-      // const accessToken = JSON.parse(localStorage.getItem('access'));
-      const accessToken = true;
+      const accessToken = localStorage.getItem('access');
       const [, currentRoute] = location.hash.split('#/');
       if (this.protectedRoutes.includes(currentRoute) && !accessToken) {
         location.hash = '#/sign-in';

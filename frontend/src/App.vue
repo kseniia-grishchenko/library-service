@@ -17,6 +17,7 @@
       <user-profile></user-profile>
       <cart-page></cart-page>
       <checkout-page></checkout-page>
+      <order-history></order-history>
     </el-main>
   </el-container>
 </template>
@@ -36,6 +37,7 @@ import UserProfile from './UserProfile/UserProfile.vue';
 import CartPage from './CartPage/CartPage.vue';
 import CheckoutPage from './CheckoutPage/CheckoutPage.vue';
 import { getRequest, postRequest } from './api';
+import OrderHistory from './OrderHistory/OrderHistory.vue';
 
 export default {
   data: () => ({
@@ -77,10 +79,9 @@ export default {
           refresh: localStorage.getItem('refresh')
         });
 
-        const { access, refresh } = data;
+        const { access } = data;
 
         localStorage.setItem('access', access);
-        localStorage.setItem('refresh', refresh);
         this.logIn();
       } catch (err) {
         console.error(err.response.data);
@@ -137,6 +138,7 @@ export default {
   created() {
     window.addEventListener('hashchange', this.hashChangeHandler);
     this.hashChangeHandler();
+    this.refreshToken();
   },
   components: {
     HeaderComp,
@@ -148,7 +150,8 @@ export default {
     AuthWrapper,
     UserProfile,
     CartPage,
-    CheckoutPage
+    CheckoutPage,
+    OrderHistory
   }
 };
 </script>

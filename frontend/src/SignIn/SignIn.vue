@@ -27,10 +27,7 @@ export default {
         password: ''
       },
       rules: {
-        password: [
-          { required: true, message: 'Please input password', trigger: 'blur' },
-          { min: 6, message: 'Password length should be at least 6 characters', trigger: 'blur' }
-        ]
+        password: [{ required: true, message: 'Please input password', trigger: 'blur' }]
       }
     };
   },

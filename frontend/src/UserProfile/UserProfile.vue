@@ -25,6 +25,7 @@
         </el-form-item>
       </el-form>
 
+      <el-button><el-link href="#/orders">View order history</el-link></el-button>
       <el-button @click="isChangePasswordDialogVisible = true">Change Password</el-button>
 
       <el-button type="danger" @click="promptDeleteConfirmation">Delete Account</el-button>
@@ -92,6 +93,9 @@ export default {
 <style scoped>
 .user-profile {
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   margin-top: 100px;
 }
 </style>
