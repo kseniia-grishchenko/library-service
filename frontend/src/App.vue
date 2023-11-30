@@ -41,7 +41,8 @@ export default {
   data: () => ({
     bookTitle: '',
     showBookHeader: false,
-    currentBookInCart: false
+    currentBookInCart: false,
+    user: null
   }),
   methods: {
     async logIn() {
