@@ -3,32 +3,32 @@
     <el-card class="box-card">
       <template #header>
         <div class="clearfix">
-          <span>User Profile</span>
+          <span>Профіль користувача</span>
         </div>
       </template>
 
       <el-form :model="user" label-position="top">
-        <el-form-item label="Username">
+        <el-form-item label="Імʼя">
           <el-input v-model="user.username" :disabled="!isEditing"></el-input>
         </el-form-item>
-        <el-form-item label="Email">
+        <el-form-item label="Електронна пошта">
           <el-input v-model="user.email" :disabled="!isEditing"></el-input>
         </el-form-item>
         <!-- Add other fields as necessary -->
 
         <el-form-item v-if="isEditing">
-          <el-button type="primary" @click="updateProfile">Save Changes</el-button>
-          <el-button @click="isEditing = false">Cancel</el-button>
+          <el-button type="primary" @click="updateProfile">Зберегти зміни</el-button>
+          <el-button @click="isEditing = false">Скасувати</el-button>
         </el-form-item>
         <el-form-item v-else>
-          <el-button @click="isEditing = true">Edit Profile</el-button>
+          <el-button @click="isEditing = true">Редагувати профіль</el-button>
         </el-form-item>
       </el-form>
 
-      <el-button><el-link href="#/orders">View order history</el-link></el-button>
-      <el-button @click="isChangePasswordDialogVisible = true">Change Password</el-button>
+      <el-button><el-link href="#/orders">Переглянути історію замовлень</el-link></el-button>
+      <el-button @click="isChangePasswordDialogVisible = true">Змінити пароль</el-button>
 
-      <el-button type="danger" @click="promptDeleteConfirmation">Delete Account</el-button>
+      <el-button type="danger" @click="promptDeleteConfirmation">Видалити акаунт</el-button>
     </el-card>
 
     <change-password-dialog
